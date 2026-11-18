@@ -1158,3 +1158,14 @@ version moves. Device state: see the game's note.
 |---|---|---|---|
 | `dm/gfx/tools/shader_split.py` | 3 | `iga_entries`, `iga_member`, `iga_shaders` and their branch in `scan_file_in`: Alchemy's igArchive version 13 (`IGA\x1a`), whose files are LZMA in 0x8000-byte blocks placed by the archive's small / medium / large block tables; every file is decoded and its whole GLSLC outputs taken. The game's split went from 12 shaders (those in `main`) to 1,945. Checked on all 74,311 files of its 401 archives; the large table (a file over 0x7FFF sectors) follows the same rule and was met on no file. nxnative has an open pull request with a reader of its own (#1077), not used here. Test: `test_split_iga.py`. Upstream candidate: yes | `PEANUTS(upstream-candidate)` |
 | `dm/host/hle_audren.c`, `dm/host/tests/t_audren_layout.c`, `dm/host/tests/t_audren_work.c`, `docs/reference/audio.md` | 71 | The host drives up to 4 audio renderers, each with its own state (`ar_t`), PCM blocks, render thread and output; it drove one, and a second `OpenAudioRenderer` logged `[RED] audren: a second renderer` and was never rendered. A hand port of nxnative 18b435ac38 and a334797d12 (MIT) onto this tree's clock pacing, catch-up queue and `DM_AUDREN_WAIT`, which stay, now per renderer. One renderer behaves as before; its log lines now name the renderer (`renderer 0 …`). Tests: the two host tests, built natively with ASan and UBSan, with a case of two renderers open at once. Not run on a device. Upstream candidate: yes (Banana Native 0.3.42 does not have it) | `PEANUTS(upstream-candidate)` on each file's first hunk, `PEANUTS` on the others |
+
+### Round 20, Pokémon Legends: Z-A in the Peanuts app (2026-11-18)
+
+Banana Native's profile (`dm/games/0100F43008C44000/`, update 2.0.2) is unchanged; a Peanuts APK carries it when its build names the title in
+`-PnxGames` (the list is given at build time, `peanuts/docs/NEW-GAME.md` step 6). Nothing of the host, the launcher or the shader chain changed; no
+library version moves. Not yet run on an Android device, so the game is not in the Supported games tables
+(`peanuts/docs/NEW-GAME.md` step 8). What the Android path has for each thing the game needed on the Mac, and what is open: the game note.
+
+| File | Change | Marking |
+|---|---|---|
+| `dm/games/0100F43008C44000/README.md` | New section "Android (Peanuts Native)": the phone's split through the game's own Oodle in the host library, the PC builder (not in `PC_DECODE`), the Vulkan counterparts of the Mac's rendering fixes, what a first run should check | the section's first line `PEANUTS:` |
